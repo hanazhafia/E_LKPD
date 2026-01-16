@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-LKPD Sistem Imun - Case Based Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h3 {
+            color: #764ba2;
+            margin: 20px 0 15px 0;
+            font-size: 1.3em;
+        }
+        
+        h4 {
+            color: #555;
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+        }
+        
+        .identity-form {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input[type="text"], textarea {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .objectives {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .objectives li {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 5px;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .objectives li:before {
+            content: "✓";
+            position: absolute;
+            left: 15px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .case-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .concept-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .definition-box {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .link-button:hover {
+            background: #764ba2;
+        }
+        
+        .help-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .help-link:hover {
+            text-decoration: underline;
+        }
+        
+        .question-box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .immune-defense {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .defense-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .defense-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .mechanism-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .mechanism-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .mechanism-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .immune-defense {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+        
+        .instruction-list {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .instruction-list ol {
+            padding-left: 25px;
+        }
+        
+        .instruction-list li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 E-LKPD CASE BASED LEARNING</h1>
+            <p class="subtitle">Sistem Imun: Analisis Kasus Alergi Makanan</p>
+            <p class="subtitle">Fase F (Kelas XI) - Semester 2</p>
+        </header>
+
+        <div class="section">
+            <h2>📖 PETUNJUK PENGGUNAAN E-LKPD</h2>
+            <div class="instruction-list">
+                <ol>
+                    <li><strong>Isi Identitas:</strong> Lengkapi data diri pada bagian identitas</li>
+                    <li><strong>Pahami CP & Tujuan:</strong> Baca capaian pembelajaran dan tujuan</li>
+                    <li><strong>Pelajari Konsep:</strong> Pahami materi sistem imun, klik link gambar dan video</li>
+                    <li><strong>Baca Kasus:</strong> Perhatikan data laboratorium dengan cermat</li>
+                    <li><strong>Kerjakan Berurutan:</strong> Ikuti 7 tahapan CBL dari awal hingga akhir</li>
+                    <li><strong>Gunakan Bantuan:</strong> Klik link "💡 Bantuan Materi" jika perlu</li>
+                    <li><strong>Tulis Lengkap:</strong> Isi setiap kotak jawaban dengan rinci</li>
+                    <li><strong>Refleksi:</strong> Renungkan pembelajaran di bagian akhir</li>
+                </ol>
+                <p style="margin-top: 15px;"><strong>⚠️ Penting:</strong> Pastikan semua jawaban terisi sebelum menyimpan hasil kerja!</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>👤 IDENTITAS PESERTA DIDIK</h2>
+            <div class="identity-form">
+                <div class="form-group">
+                    <label>Nama:</label>
+                    <input type="text" placeholder="Masukkan nama lengkap">
+                </div>
+                <div class="form-group">
+                    <label>Kelas:</label>
+                    <input type="text" placeholder="Contoh: XI MIPA 1">
+                </div>
+                <div class="form-group">
+                    <label>No. Absen:</label>
+                    <input type="text" placeholder="Masukkan nomor absen">
+                </div>
+                <div class="form-group">
+                    <label>Kelompok:</label>
+                    <input type="text" placeholder="Contoh: Kelompok 1">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal:</label>
+                    <input type="text" placeholder="Contoh: 15 Januari 2026">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎓 CAPAIAN PEMBELAJARAN (CP)</h2>
+            <p><strong>Peserta didik mampu menganalisis keterkaitan struktur organ pada sistem organ dengan fungsinya serta kelainan atau gangguan yang muncul pada sistem organ tersebut (Sistem Imun)</strong></p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 TUJUAN PEMBELAJARAN</h2>
+            <p style="margin-bottom: 15px;"><strong>Setelah mempelajari E-LKPD ini, peserta didik mampu:</strong></p>
+            <ul class="objectives">
+                <li>Mengidentifikasi data sistem imun dari tabel laboratorium pada kasus alergi</li>
+                <li>Menghitung persentase kenaikan sel imun berdasarkan data laboratorium pasien dengan kelainan sistem imun</li>
+                <li>Mengelompokkan tingkat keparahan gangguan sistem imun berdasarkan kriteria medis</li>
+                <li>Menentukan strategi perhitungan untuk menganalisis efektivitas penanganan kelainan sistem imun</li>
+                <li>Menafsirkan hubungan komponen sistem imun dengan kondisi kesehatan pasien kelainan sistem imun</li>
+                <li>Menggunakan hasil perhitungan untuk menentukan kategori risiko pasien kelainan sistem imun</li>
+                <li>Menganalisis pola perubahan data sistem imun pada berbagai kondisi kesehatan pasien kelainan sistem imun</li>
+                <li>Menyimpulkan keterkaitan data numerik dengan kondisi kesehatan pasien kelainan sistem imun</li>
+                <li>Mengevaluasi ketepatan data berdasarkan kriteria medis yang relevan pada kasus kelainan sistem imun</li>
+                <li>Memberikan justifikasi ilmiah yang didukung data numerik tentang kelainan sistem imun</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📖 KONSEP DASAR SISTEM IMUN</h2>
+            <p style="font-style: italic; color: #666; margin-bottom: 20px;">*Materi yang telah dipelajari pada Pertemuan 1*</p>
+            
+            <h3>🛡️ Apa itu Sistem Imun?</h3>
+            <div class="concept-box">
+                <p><strong>Sistem imun</strong> adalah sistem pertahanan tubuh yang melindungi kita dari berbagai penyakit. Sistem ini bekerja seperti <strong>tentara yang menjaga benteng tubuh</strong> dari serangan bakteri, virus, dan kuman lainnya.</p>
+            </div>
+
+            <h3>🔑 Istilah-Istilah Penting dalam Sistem Imun</h3>
+            
+            <div class="definition-box">
+                <h4>1. Patogen</h4>
+                <p><strong>Patogen</strong> adalah <strong>agen penginfeksi penyebab penyakit</strong> seperti virus, bakteri, jamur, dan parasit. Contoh: virus influenza, bakteri E. coli, parasit cacing.</p>
+            </div>
+
+            <div class="definition-box">
+                <h4>2. Antigen</h4>
+                <p><strong>Antigen</strong> adalah <strong>molekul asing yang dikenali oleh sistem imun</strong>. Antigen bisa berasal dari patogen (bakteri, virus), zat asing (serbuk sari, protein makanan), atau sel abnormal (sel kanker).</p>
+                <p style="margin-top: 10px;">💡 <em>Ketika antigen masuk ke tubuh, sistem imun akan mengenali dan merespons untuk melawannya.</em></p>
+            </div>
+
+            <div class="definition-box">
+                <h4>3. Antibodi (Imunoglobulin)</h4>
+                <p><strong>Antibodi</strong> adalah <strong>protein spesifik yang dihasilkan sistem imun untuk melawan antigen</strong>. Antibodi diproduksi oleh sel B (limfosit B) dan bekerja dengan cara:</p>
+                <ul class="mechanism-list">
+                    <li><strong>Netralisasi:</strong> Menutup epitop antigen agar tidak aktif</li>
+                    <li><strong>Aglutinasi:</strong> Menggumpalkan antigen partikel</li>
+                    <li><strong>Presipitasi:</strong> Mengendapkan antigen terlarut</li>
+                    <li><strong>Fiksasi Komplemen:</strong> Mengaktifkan protein komplemen → lisis sel patogen</li>
+                </ul>
+            </div>
+
+            <h3>🩸 Jenis-Jenis Antibodi (Imunoglobulin)</h3>
+            <table>
+                <tr>
+                    <th>Jenis Antibodi</th>
+                    <th>Fungsi Utama</th>
+                    <th>Keterangan</th>
+                </tr>
+                <tr>
+                    <td><strong>IgA</strong></td>
+                    <td>Melawan mikroorganisme pada zat sekresi</td>
+                    <td>Terdapat di keringat, ASI, ludah, air mata</td>
+                </tr>
+                <tr>
+                    <td><strong>IgD</strong></td>
+                    <td>Membantu memicu respons imunitas</td>
+                    <td>Jumlah sedikit dalam darah</td>
+                </tr>
+                <tr>
+                    <td><strong>IgE</strong></td>
+                    <td>Menyebabkan pelepasan histamin dan mediator kimia</td>
+                    <td><span class="highlight">⚠️ Tinggi pada kondisi ALERGI</span></td>
+                </tr>
+                <tr>
+                    <td><strong>IgG</strong></td>
+                    <td>Antibodi paling banyak (~80%), melewati plasenta</td>
+                    <td>Memberikan imunitas pada janin</td>
+                </tr>
+                <tr>
+                    <td><strong>IgM</strong></td>
+                    <td>Antibodi pertama yang tiba di lokasi infeksi</td>
+                    <td>Menetap di pembuluh darah</td>
+                </tr>
+            </table>
+
+            <h3>⚔️ Dua Mekanisme Pertahanan Tubuh</h3>
+            
+            <div class="immune-defense">
+                <div class="defense-card">
+                    <h4>🔵 Pertahanan Non-Spesifik (Bawaan/Innate)</h4>
+                    <p style="margin-bottom: 10px;"><strong>Karakteristik:</strong></p>
+                    <ul class="mechanism-list">
+                        <li>Respon cepat</li>
+                        <li>Tidak membedakan jenis patogen</li>
+                        <li>Imunitas bawaan sejak lahir</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Pertahanan Lini Pertama:</strong></p>
+                    <ul class="mechanism-list">
+                        <li><strong>Kulit:</strong> Penghalang fisik pertama</li>
+                        <li><strong>Membran mukosa:</strong> Menghasilkan lendir penangkap antigen</li>
+                        <li><strong>Rambut hidung & silia:</strong> Menjebak partikel asing</li>
+                        <li><strong>Air mata, saliva, urine:</strong> Mengandung enzim lisozim</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Pertahanan Lini Kedua:</strong></p>
+                    <ul class="mechanism-list">
+                        <li><strong>Sel fagosit:</strong> Makrofag memakan patogen</li>
+                        <li><strong>Peradangan:</strong> Kemerahan & bengkak untuk membawa sel fagosit</li>
+                        <li><strong>Protein antimikroba:</strong> Interferon & komplemen</li>
+                    </ul>
+                </div>
+
+                <div class="defense-card">
+                    <h4>🟣 Pertahanan Spesifik (Adaptif)</h4>
+                    <p style="margin-bottom: 10px;"><strong>Karakteristik:</strong></p>
+                    <ul class="mechanism-list">
+                        <li>Respon lambat tapi spesifik</li>
+                        <li>Menargetkan patogen tertentu</li>
+                        <li>Memiliki memori imun</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Komponen Utama:</strong></p>
+                    <p><strong>Limfosit B:</strong></p>
+                    <ul class="mechanism-list">
+                        <li>Sel B Pembelah → membentuk Sel B Plasma & Pengingat</li>
+                        <li>Sel B Plasma → menghasilkan antibodi</li>
+                        <li>Sel B Pengingat → mengingat antigen (memori imun)</li>
+                    </ul>
+                    <p style="margin-top: 10px;"><strong>Limfosit T:</strong></p>
+                    <ul class="mechanism-list">
+                        <li>Sel T Pembunuh → menyerang patogen langsung</li>
+                        <li>Sel T Pembantu → menstimulasi sel T lain</li>
+                        <li>Sel T Supresor → menghentikan respons imun</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>🔬 Sel Darah Putih (Leukosit) dan Fungsinya</h3>
+            <table>
+                <tr>
+                    <th>Jenis Leukosit</th>
+                    <th>Fungsi Utama</th>
+                    <th>Nilai Normal</th>
+                </tr>
+                <tr>
+                    <td><strong>Neutrofil</strong></td>
+                    <td>Memakan dan menghancurkan bakteri (fagositosis)</td>
+                    <td>2.500-7.000 sel/mm³</td>
+                </tr>
+                <tr>
+                    <td><strong>Limfosit</strong></td>
+                    <td>Menghasilkan antibodi (Sel B) & membunuh sel terinfeksi (Sel T)</td>
+                    <td>1.500-4.000 sel/mm³</td>
+                </tr>
+                <tr>
+                    <td><strong>Monosit/Makrofag</strong></td>
+                    <td>Membersihkan sel-sel mati dan patogen</td>
+                    <td>200-800 sel/mm³</td>
+                </tr>
+                <tr style="background: #fff3cd;">
+                    <td><strong>Eosinofil</strong></td>
+                    <td><strong>⚠️ Melawan parasit dan BERPERAN DALAM REAKSI ALERGI</strong></td>
+                    <td><span class="highlight">40-400 sel/mm³</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Basofil</strong></td>
+                    <td>Melepaskan histamin saat reaksi peradangan</td>
+                    <td>20-100 sel/mm³</td>
+                </tr>
+            </table>
+            <div class="container">
+        <div class="header">
+            <h1> Penting dipahami! Jenis Gangguan Sistem Imun</h1>
+            <p>Alergi, Imunodefisiensi, dan Autoimun</p>
+        </div>
+
+        <div class="definition-box">
+        <!-- ALERGI -->
+        <div class="disorder-card allergy-card">
+            <div class="card-header">
+                🤧 <strong>1. ALERGI</strong>
+            </div>
+            <div class="card-body">
+                <div class="definition">
+                    <strong>Alergi</strong> = Sistem imun <strong>BERLEBIHAN</strong> terhadap zat yang sebenarnya tidak berbahaya (makanan, serbuk sari, obat)
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Apa itu?</th>
+                            <th>Normal</th>
+                            <th>Saat Alergi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Eosinofil</strong></td>
+                            <td>Sel darah putih anti-alergi</td>
+                            <td>40-400</td>
+                            <td><span class="info-badge badge-high">⬆️ >400</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>IgE</strong></td>
+                            <td>Antibodi pemicu alergi</td>
+                            <td><100</td>
+                            <td><span class="info-badge badge-high">⬆️ >100</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <strong>💡 Prinsip:</strong> Saat alergi, tubuh memproduksi IgE → memicu histamin → gejala gatal, bengkak, sesak → Eosinofil naik untuk merespons
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="definition-box">
+        <!-- IMUNODEFISIENSI -->
+        <div class="disorder-card immuno-card">
+            <div class="card-header">
+                🦠 <strong>2. IMUNODEFISIENSI</strong>
+            </div>
+            <div class="card-body">
+                <div class="definition">
+                    <strong>Imunodefisiensi</strong> = Sistem imun <strong>LEMAH</strong>, tubuh tidak bisa melawan infeksi. <strong>Contoh: HIV/AIDS</strong>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Apa itu?</th>
+                            <th>Normal</th>
+                            <th>Pada HIV</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CD4+</strong></td>
+                            <td>Sel T pembantu (komandan imun)</td>
+                            <td>500-1.500</td>
+                            <td><span class="info-badge badge-low">⬇️ <500</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Viral Load</strong></td>
+                            <td>Jumlah virus HIV dalam darah</td>
+                            <td><50</td>
+                            <td><span class="info-badge badge-high">⬆️ Tinggi</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p style="margin: 15px 0;"><strong>Pengobatan: ARV</strong> (obat untuk hambat virus HIV, diminum setiap hari)</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kondisi</th>
+                            <th>CD4+</th>
+                            <th>Viral Load</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tanpa ARV</td>
+                            <td><span class="info-badge badge-low">180 ⬇️⬇️</span></td>
+                            <td><span class="info-badge badge-high">85.000 ⬆️⬆️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dengan ARV</td>
+                            <td><span class="info-badge badge-success">520 ✓</span></td>
+                            <td><span class="info-badge badge-success">Tidak terdeteksi ✓</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <strong>💡 Prinsip:</strong> Virus HIV menyerang CD4+ → CD4+ turun → sistem imun lemah → mudah sakit. ARV menghentikan virus → CD4+ naik kembali
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="definition-box">
+        <!-- AUTOIMUN -->
+        <div class="disorder-card autoimmune-card">
+            <div class="card-header">
+                ⚔️ <strong>3. AUTOIMUN</strong>
+            </div>
+            <div class="card-body">
+                <div class="definition">
+                    <strong>Autoimun</strong> = Sistem imun <strong>SALAH SASARAN</strong>, menyerang sel tubuh sendiri. <strong>Contoh: Lupus, Diabetes Tipe 1</strong>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Penyakit</th>
+                            <th>Organ Diserang</th>
+                            <th>Gejala</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Lupus</strong></td>
+                            <td>Kulit, sendi, ginjal</td>
+                            <td>Ruam wajah, nyeri sendi</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Diabetes Tipe 1</strong></td>
+                            <td>Pankreas</td>
+                            <td>Gula darah tinggi</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rheumatoid Arthritis</strong></td>
+                            <td>Sendi</td>
+                            <td>Bengkak, kaku sendi</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p style="margin: 15px 0;"><strong>Data Lab Lupus:</strong></p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pemeriksaan</th>
+                            <th>Apa itu?</th>
+                            <th>Hasil</th>
+                            <th>Artinya</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Autoantibodi</strong></td>
+                            <td>Antibodi serang tubuh sendiri</td>
+                            <td><span class="info-badge badge-high">⬆️ Tinggi</span></td>
+                            <td>Sistem imun menyerang diri sendiri</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Komplemen C3</strong></td>
+                            <td>Protein pembantu sistem imun</td>
+                            <td><span class="info-badge badge-low">⬇️ Rendah</span></td>
+                            <td>Banyak terpakai untuk peradangan</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <strong>💡 Prinsip:</strong> Sistem imun salah kenali sel tubuh sebagai musuh → produksi autoantibodi → serang organ sendiri → peradangan kronis
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- COMPARISON -->
+        <div class="comparison-section">
+           <div class="definition-box">
+           <h2>📊 Perbandingan Singkat</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Alergi</th>
+                        <th>Imunodefisiensi</th>
+                        <th>Autoimun</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Masalah</strong></td>
+                        <td>Imun BERLEBIHAN</td>
+                        <td>Imun LEMAH</td>
+                        <td>Imun SALAH SASARAN</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Marker Lab</strong></td>
+                        <td>Eosinofil ⬆️<br>IgE ⬆️</td>
+                        <td>CD4+ ⬇️<br>Viral Load ⬆️</td>
+                        <td>Autoantibodi ⬆️<br>Komplemen ⬇️</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contoh</strong></td>
+                        <td>Alergi udang</td>
+                        <td>HIV/AIDS</td>
+                        <td>Lupus</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
+            <h3>🏥 Organ-Organ Sistem Imun</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                <div class="concept-box">
+                    <h4>Sumsum Tulang</h4>
+                    <p>Memproduksi sel darah putih</p>
+                    <a href="https://www.google.com/search?q=sumsum+tulang+anatomi&tbm=isch" class="link-button" target="_blank">🔍 Lihat Gambar</a>
+                </div>
+                <div class="concept-box">
+                    <h4>Timus</h4>
+                    <p>Tempat pematangan sel T</p>
+                    <a href="https://www.google.com/search?q=timus+organ+anatomi&tbm=isch" class="link-button" target="_blank">🔍 Lihat Gambar</a>
+                </div>
+                <div class="concept-box">
+                    <h4>Limpa</h4>
+                    <p>Menyaring darah dan menyimpan sel imun</p>
+                    <a href="https://www.google.com/search?q=limpa+organ+anatomi&tbm=isch" class="link-button" target="_blank">🔍 Lihat Gambar</a>
+                </div>
+                <div class="concept-box">
+                    <h4>Kelenjar Getah Bening</h4>
+                    <p>Menyaring cairan tubuh dari patogen</p>
+                    <a href="https://www.google.com/search?q=kelenjar+getah+bening+anatomi&tbm=isch" class="link-button" target="_blank">🔍 Lihat Gambar</a>
+                </div>
+            </div>
+
+            <h3>🎥 Video Pembelajaran</h3>
+            <div style="text-align: center; margin: 20px 0;">
+                <iframe width="100%" height="400" src="https://www.youtube.com/embed/lXfEK8G8CUI" title="Sistem Imun" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 10px;"></iframe>
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">Sumber: Kemendikbud RI - Respon Imun Humoral dan Seluler</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔬 TAHAP 1 CBL: MENETAPKAN KASUS YANG DIKAJI</h2>
+            
+            <h3>📋 KASUS: ALERGI MAKANAN PADA REMAJA</h3>
+            
+            <div class="case-box">
+                <h4>👧 Profil Pasien</h4>
+                <p><strong>Identitas:</strong> Pasien A (perempuan, 16 tahun, siswi SMA)</p>
+                <p style="margin-top: 10px;"><strong>Keluhan Utama:</strong></p>
+                <p>Setelah makan udang goreng di restoran seafood bersama teman-temannya, sekitar 30 menit kemudian Pasien A tiba-tiba mengalami:</p>
+                <ul style="margin-left: 25px; margin-top: 10px;">
+                    <li>Gatal-gatal di seluruh tubuh yang sangat mengganggu</li>
+                    <li>Muncul bentol-bentol kemerahan (urtikaria/biduran)</li>
+                    <li>Sesak napas ringan dan dada terasa berat</li>
+                    <li>Mual dan pusing</li>
+                </ul>
+                <p style="margin-top: 15px;">Pasien A segera dibawa ke UGD dan dokter melakukan pemeriksaan darah lengkap untuk mengetahui kondisi sistem imunnya.</p>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="https://www.google.com/search?q=alergi+kulit+urtikaria+biduran&tbm=isch" class="link-button" target="_blank">🔍 Lihat Gambar Gejala Urtikaria (Biduran)</a>
+                <a href="https://www.google.com/search?q=alergi+makanan+udang&tbm=isch" class="link-button" target="_blank">🔍 Lihat Gambar Alergi Makanan</a>
+            </div>
+
+            <h3>📊 Data Hasil Laboratorium Pasien A</h3>
+            <p style="margin-bottom: 15px;">Berikut adalah hasil pemeriksaan darah Pasien A yang diambil saat mengalami reaksi alergi:</p>
+            
+            <table>
+                <tr>
+                    <th>Pemeriksaan</th>
+                    <th>Hasil Pasien A</th>
+                    <th>Nilai Normal</th>
+                    <th>Interpretasi</th>
+                </tr>
+                <tr>
+                    <td><strong>Leukosit</strong></td>
+                    <td>11.500 sel/mm³</td>
+                    <td>5.000-10.000 sel/mm³</td>
+                    <td><span class="highlight">⬆️ Meningkat</span></td>
+                </tr>
+                <tr style="background: #fff3cd;">
+                    <td><strong>Eosinofil</strong></td>
+                    <td><strong>950 sel/mm³</strong></td>
+                    <td><strong>40-400 sel/mm³</strong></td>
+                    <td><span class="highlight">⬆️⬆️ SANGAT TINGGI</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Neutrofil</strong></td>
+                    <td>6.325 sel/mm³</td>
+                    <td>2.500-7.000 sel/mm³</td>
+                    <td>Normal</td>
+                </tr>
+                <tr>
+                    <td><strong>Limfosit</strong></td>
+                    <td>3.450 sel/mm³</td>
+                    <td>1.500-4.000 sel/mm³</td>
+                    <td>Normal</td>
+                </tr>
+                <tr style="background: #fff3cd;">
+                    <td><strong>IgE</strong></td>
+                    <td><strong>580 IU/mL</strong></td>
+                    <td><strong>&lt;100 IU/mL</strong></td>
+                    <td><span class="highlight">⬆️⬆️ SANGAT TINGGI</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Histamin</strong></td>
+                    <td>Meningkat</td>
+                    <td>Normal</td>
+                    <td><span class="highlight">⬆️ Meningkat</span></td>
+                </tr>
+            </table>
+
+            <div class="important-box">
+                <h4>💡 Penjelasan Data Laboratorium</h4>
+                <p><strong>Mengapa Eosinofil dan IgE Pasien A sangat tinggi?</strong></p>
+                <p style="margin-top: 10px;">Ketika tubuh Pasien A terpapar alergen (protein udang), terjadi rangkaian reaksi:</p>
+                <ol style="padding-left: 25px; margin-top: 10px;">
+                    <li><strong>Protein udang</strong> (antigen) masuk ke tubuh</li>
+                    <li>Sistem imun mengenali protein udang sebagai "ancaman"</li>
+                    <li>Sel B memproduksi <strong>antibodi IgE</strong> dalam jumlah besar</li>
+                    <li>IgE menempel pada sel mast dan basofil → melepaskan <strong>histamin</strong></li>
+                    <li>Histamin menyebabkan gejala: gatal, bentol, sesak napas</li>
+                    <li><strong>Eosinofil</strong> direkrut ke area reaksi alergi untuk merespons peradangan</li>
+                </ol>
+                <p style="margin-top: 15px; font-weight: bold;">🎯 Kesimpulan: Tingginya Eosinofil dan IgE mengkonfirmasi bahwa Pasien A mengalami REAKSI ALERGI!</p>
+            </div>
+
+            <h3>📚 Sumber Pembelajaran Tambahan</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
+                <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan/patofisiologi" class="link-button" target="_blank">📖 Patofisiologi Alergi Makanan</a>
+                <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan" class="link-button" target="_blank">📖 Tentang Alergi Makanan</a>
+                <a href="https://www.halodoc.com/artikel/kenali-fungsi-eosinofil-dalam-tubuh" class="link-button" target="_blank">🔬 Fungsi Eosinofil</a>
+                <a href="https://wirabuana.ac.id/artikel/mekanisme-reaksi-alergi-dalam-tubuh/" class="link-button" target="_blank">📖 Mekanisme Reaksi Alergi</a>
+                <a href="https://www.youtube.com/results?search_query=mekanisme+alergi+biologi" class="link-button" target="_blank">🎬 Video Mekanisme Alergi</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 TAHAP 2 CBL: MENGANALISIS KASUS SECARA MENDALAM</h2>
+            
+            <div class="question-box">
+                <h3>Pertanyaan 1 - Mengidentifikasi Informasi dari Tabel</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Perhatikan kembali tabel hasil pemeriksaan darah Pasien A di atas. Kita akan membandingkan hasil Pasien A dengan nilai normal untuk memahami kondisi sistem imunnya.</p>
+                </div>
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Berapa kadar Eosinofil Pasien A?</p>
+                <p>b) Berapa kadar IgE Pasien A?</p>
+                <p>c) Bagaimana kondisi kedua nilai tersebut dibandingkan dengan nilai normal? (Jelaskan apakah lebih tinggi, normal, atau lebih rendah)</p>
+                
+                <div style="margin-top: 15px;">
+                    <p style="color: #667eea; font-weight: bold;">💡 Bantuan:</p>
+                    <p style="font-size: 0.9em;">Bandingkan nilai hasil Pasien A dengan batas atas nilai normal. Contoh: Jika nilai normal adalah 40-400, maka batas atas = 400.</p>
+                </div>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea placeholder="Tuliskan jawaban lengkap Anda di sini..."></textarea>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 2 - Menghitung Persentase dan Selisih</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Untuk mengetahui seberapa parah kondisi Pasien A, kita perlu menghitung seberapa besar kenaikan kadar Eosinofil dibandingkan nilai normal. Ini penting untuk menentukan tingkat keparahan reaksi alergi.</p>
+                    <p style="margin-top: 10px;"><strong>Data yang diketahui:</strong></p>
+                    <ul style="margin-left: 25px; margin-top: 5px;">
+                        <li>Kadar Eosinofil Pasien A = 950 sel/mm³</li>
+                        <li>Batas atas nilai normal Eosinofil = 400 sel/mm³</li>
+                    </ul>
+                </div>
+                
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Hitunglah selisih kenaikan kadar Eosinofil Pasien A! (Hasil Pasien A - Nilai Normal)</p>
+                <p>b) Hitunglah persentase kenaikan kadar Eosinofil Pasien A!</p>
+                <p style="margin-left: 25px; font-size: 0.9em;">Rumus: [(Nilai Pasien A - Nilai Normal) / Nilai Normal] × 100%</p>
+                <p>c) Berdasarkan perhitungan Anda, apakah kadar Eosinofil Pasien A masih dalam batas normal? Jelaskan!</p>
+                
+                <div style="margin-top: 15px;">
+                    <p style="color: #667eea; font-weight: bold;">💡 Bantuan Perhitungan:</p>
+                    <a href="https://kumparan.com/berita-hari-ini/cara-menghitung-persentase-kenaikan-dan-penurunan-rumus-dan-contoh-soal-21WfXvCYe5X" class="help-link" target="_blank">📊 Cara Menghitung Persentase Kenaikan</a>
+                </div>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea id="jawaban2" placeholder="Tuliskan perhitungan dan penjelasan lengkap Anda di sini...
+
+Contoh format jawaban:
+a) Selisih = ... sel/mm³
+b) Persentase = ...%
+c) Kesimpulan: ..."></textarea>
+                
+                <!-- FITUR NUMERASI: Validasi Input -->
+                <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+                    <p style="font-weight: bold; color: #1976d2; margin-bottom: 10px;">🔍 Cek Pemahaman Anda:</p>
+                    <p style="margin-bottom: 10px; font-size: 0.9em;">Setelah menghitung, jawab pertanyaan ini untuk mengecek pemahaman Anda:</p>
+                    
+                    <div style="margin: 10px 0;">
+                        <label style="display: block; margin-bottom: 5px;">Berapakah selisih yang Anda hitung? (dalam sel/mm³)</label>
+                        <input type="number" id="check_selisih_2" style="padding: 8px; width: 200px; border: 2px solid #ddd; border-radius: 5px;">
+                        <button onclick="cekSelisih2()" style="padding: 8px 20px; background: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cek Jawaban</button>
+                    </div>
+                    <div id="feedback_selisih_2" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    
+                    <div style="margin: 15px 0;">
+                        <label style="display: block; margin-bottom: 5px;">Berapakah persentase kenaikan yang Anda hitung? (dalam %)</label>
+                        <input type="number" id="check_persen_2" step="0.1" style="padding: 8px; width: 200px; border: 2px solid #ddd; border-radius: 5px;">
+                        <button onclick="cekPersen2()" style="padding: 8px 20px; background: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cek Jawaban</button>
+                    </div>
+                    <div id="feedback_persen_2" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    
+                    <p style="margin-top: 15px; font-size: 0.85em; color: #666; font-style: italic;">
+                        💡 Tip: Fitur ini membantu Anda memastikan perhitungan sudah benar sebelum melanjutkan ke pertanyaan berikutnya. Anda tetap harus menghitung sendiri!
+                    </p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 3 - Mengelompokkan Tingkat Keparahan Alergi</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Dalam praktik medis, dokter perlu mengelompokkan pasien berdasarkan tingkat keparahan alergi untuk menentukan penanganan yang tepat. Mari kita pelajari cara mengelompokkan tingkat keparahan alergi berdasarkan data laboratorium.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Penjelasan Kriteria:</strong></p>
+                    <ul style="margin-left: 25px; margin-top: 5px;">
+                        <li><strong>Alergi Ringan:</strong> Kedua nilai sedikit meningkat (Eosinofil 400-600 dan IgE 100-200)</li>
+                        <li><strong>Alergi Sedang:</strong> Kedua nilai meningkat cukup tinggi (Eosinofil 600-800 dan IgE 200-400)</li>
+                        <li><strong>Alergi Berat:</strong> Kedua nilai sangat tinggi (Eosinofil >800 dan IgE >400)</li>
+                    </ul>
+                    <p style="margin-top: 10px; font-style: italic; color: #666;">⚠️ Catatan: KEDUA kriteria (Eosinofil DAN IgE) harus terpenuhi untuk masuk kategori tertentu.</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Data Pasien yang Perlu Dianalisis:</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Nama Pasien</th>
+                        <th>Eosinofil (sel/mm³)</th>
+                        <th>IgE (IU/mL)</th>
+                    </tr>
+                    <tr>
+                        <td>Pasien A</td>
+                        <td>950</td>
+                        <td>580</td>
+                    </tr>
+                    <tr>
+                        <td>Pasien B</td>
+                        <td>520</td>
+                        <td>180</td>
+                    </tr>
+                    <tr>
+                        <td>Pasien C</td>
+                        <td>680</td>
+                        <td>320</td>
+                    </tr>
+                    <tr>
+                        <td>Pasien D</td>
+                        <td>380</td>
+                        <td>95</td>
+                    </tr>
+                </table>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Kelompokkan setiap pasien ke dalam kategori tingkat keparahan alergi (Ringan/Sedang/Berat/Normal)! Jelaskan alasan pengelompokan Anda untuk setiap pasien.</p>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea placeholder="Tuliskan analisis lengkap Anda di sini...
+
+Contoh format jawaban:
+a) 
+- Pasien A: Kategori ..., karena Eosinofil ... dan IgE ...
+- Pasien B: Kategori ..., karena ...
+- dst."></textarea>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 4 - Menentukan Strategi Perhitungan Efektivitas Terapi</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Setelah pasien mendapat pengobatan, dokter perlu mengevaluasi apakah terapi yang diberikan efektif atau tidak. Untuk itu, kita perlu memilih strategi perhitungan yang tepat untuk membandingkan kondisi pasien sebelum dan sesudah terapi.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Pilihan Strategi Perhitungan:</strong></p>
+                    <ol style="margin-left: 25px; margin-top: 5px;">
+                        <li><strong>Selisih:</strong> Nilai Akhir - Nilai Awal (menunjukkan besaran penurunan/kenaikan)</li>
+                        <li><strong>Persentase Penurunan:</strong> [(Nilai Awal - Nilai Akhir) / Nilai Awal] × 100% (menunjukkan proporsi penurunan)</li>
+                        <li><strong>Rata-rata:</strong> (Nilai Awal + Nilai Akhir) / 2 (menunjukkan nilai tengah)</li>
+                    </ol>
+                    <p style="margin-top: 10px; font-style: italic; color: #666;">💡 Pertimbangkan: Strategi mana yang paling baik untuk membandingkan efektivitas terapi antar pasien dengan nilai awal yang berbeda?</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Data Pasien Sebelum dan Sesudah Terapi (2 minggu pengobatan):</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Pasien</th>
+                        <th>Eosinofil Awal</th>
+                        <th>Eosinofil Akhir</th>
+                        <th>IgE Awal</th>
+                        <th>IgE Akhir</th>
+                    </tr>
+                    <tr>
+                        <td>Pasien X</td>
+                        <td>920</td>
+                        <td>380</td>
+                        <td>550</td>
+                        <td>120</td>
+                    </tr>
+                    <tr>
+                        <td>Pasien Y</td>
+                        <td>680</td>
+                        <td>520</td>
+                        <td>340</td>
+                        <td>210</td>
+                    </tr>
+                    <tr>
+                        <td>Pasien Z</td>
+                        <td>480</td>
+                        <td>460</td>
+                        <td>180</td>
+                        <td>170</td>
+                    </tr>
+                </table>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Strategi perhitungan apa yang paling tepat untuk menentukan efektivitas terapi? (Pilih: Selisih, Persentase Penurunan, atau Rata-rata). Jelaskan alasan pemilihan strategi tersebut!</p>
+                <p>b) Gunakan strategi yang Anda pilih untuk menghitung efektivitas terapi pada ketiga pasien (untuk Eosinofil saja)!</p>
+                <p>c) Berdasarkan perhitungan Anda, pasien mana yang mengalami perbaikan paling efektif? Jelaskan!</p>
+                
+                <div style="margin-top: 15px;">
+                    <p style="color: #667eea; font-weight: bold;">💡 Bantuan Perhitungan:</p>
+                    <a href="https://katadata.co.id/lifestyle/edukasi/637cb4a0bc2db/cara-menghitung-persentase-kenaikan-dan-contoh-soalnya" class="help-link" target="_blank">📊 Cara Menghitung Persentase Penurunan</a>
+                </div>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea id="jawaban4" placeholder="Tuliskan analisis dan perhitungan lengkap Anda di sini...
+
+Contoh format jawaban:
+a) Strategi yang saya pilih: ..., karena ...
+
+b) Perhitungan:
+- Pasien X: ...
+- Pasien Y: ...
+- Pasien Z: ...
+
+c) Pasien dengan perbaikan terbaik: ..., karena ..."></textarea>
+                
+                <!-- FITUR NUMERASI: Validasi Perhitungan Efektivitas -->
+                <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+                    <p style="font-weight: bold; color: #1976d2; margin-bottom: 10px;">🔍 Cek Perhitungan Persentase Penurunan Anda:</p>
+                    <p style="margin-bottom: 10px; font-size: 0.9em;">Setelah menghitung persentase penurunan ketiga pasien, masukkan hasilnya di sini untuk memastikan perhitungan Anda benar:</p>
+                    
+                    <div style="margin: 10px 0;">
+                        <label style="display: block; margin-bottom: 5px;"><strong>Pasien X:</strong> Persentase penurunan Eosinofil (%)</label>
+                        <input type="number" id="check_efek_x" step="0.1" style="padding: 8px; width: 200px; border: 2px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <label style="display: block; margin-bottom: 5px;"><strong>Pasien Y:</strong> Persentase penurunan Eosinofil (%)</label>
+                        <input type="number" id="check_efek_y" step="0.1" style="padding: 8px; width: 200px; border: 2px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <label style="display: block; margin-bottom: 5px;"><strong>Pasien Z:</strong> Persentase penurunan Eosinofil (%)</label>
+                        <input type="number" id="check_efek_z" step="0.1" style="padding: 8px; width: 200px; border: 2px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <button onclick="cekEfektivitas4()" style="padding: 10px 25px; background: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px;">Cek Semua Jawaban</button>
+                    
+                    <div id="feedback_efek_4" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    
+                    <p style="margin-top: 15px; font-size: 0.85em; color: #666; font-style: italic;">
+                        💡 Tip: Perhitungan persentase penurunan membantu membandingkan efektivitas terapi secara adil meskipun nilai awal pasien berbeda-beda.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 TAHAP 3 CBL: MENCARI DATA DAN LITERATUR PENDUKUNG</h2>
+            
+            <h3>📚 Sumber Literatur Pendukung</h3>
+            <div class="concept-box">
+                <p>Untuk membantu menganalisis kasus alergi Rani dan menjawab pertanyaan-pertanyaan berikutnya, gunakan sumber-sumber berikut sebagai referensi. Baca dengan teliti dan catat informasi penting yang mendukung analisis Anda.</p>
+            </div>
+
+            <h4 style="margin-top: 20px;">💡 Literatur tentang Alergi dan Sistem Imun:</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan/patofisiologi" class="link-button" target="_blank">📖 Patofisiologi Alergi Makanan</a>
+                <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan" class="link-button" target="_blank">📖 Tentang Alergi Makanan</a>
+                <a href="https://www.halodoc.com/artikel/kenali-fungsi-eosinofil-dalam-tubuh" class="link-button" target="_blank">🔬 Fungsi Eosinofil dalam Tubuh</a>
+                <a href="https://wirabuana.ac.id/artikel/mekanisme-reaksi-alergi-dalam-tubuh/" class="link-button" target="_blank">📖 Mekanisme Reaksi Alergi</a>
+                <a href="https://www.idai.or.id/artikel/seputar-kesehatan-anak/alergi-makanan-pada-bayi-dan-anak" class="link-button" target="_blank">👨‍⚕️ IDAI - Alergi Makanan</a>
+                <a href="https://sardjito.co.id/2022/06/20/faktor-resiko-munculnya-alergi/" class="link-button" target="_blank">📖 Faktor Risiko Alergi</a>
+            </div>
+
+            <div class="question-box">
+                <h4>📝 Catatan Literatur yang Anda Temukan:</h4>
+                <p style="margin: 10px 0;">Tuliskan informasi penting dari literatur yang Anda baca untuk mendukung analisis kasus. Catat hal-hal berikut:</p>
+                <ul style="margin-left: 25px; margin-bottom: 15px;">
+                    <li>Mekanisme terjadinya alergi makanan</li>
+                    <li>Peran eosinofil dan IgE dalam reaksi alergi</li>
+                    <li>Faktor-faktor yang mempengaruhi tingkat keparahan alergi</li>
+                    <li>Informasi lain yang relevan</li>
+                </ul>
+                <textarea placeholder="Tuliskan catatan literatur Anda di sini...
+
+Contoh format:
+1. Dari sumber ... saya memperoleh informasi bahwa ...
+2. Menurut ... mekanisme alergi terjadi melalui ...
+3. dst."></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 TAHAP 4 CBL: MENENTUKAN ALTERNATIF PENYELESAIAN</h2>
+            
+            <div class="concept-box">
+                <p><strong>Konteks:</strong> Setelah memahami mekanisme alergi dan menganalisis data laboratorium, sekarang kita akan menentukan alternatif penyelesaian untuk kasus Rani. Penyelesaian meliputi penanganan medis dan pencegahan agar alergi tidak terulang.</p>
+            </div>
+
+            <div class="question-box">
+                <h3>🎯 Alternatif Penyelesaian Masalah</h3>
+                
+                <h4>a) Langkah Penanganan Medis</h4>
+                <p style="margin: 10px 0;">Berdasarkan analisis data dan literatur yang telah Anda pelajari, apa saja langkah penanganan medis yang perlu dilakukan untuk Pasien A? (Pertimbangkan obat-obatan, pemeriksaan lanjutan, dll)</p>
+                <textarea placeholder="Tuliskan langkah penanganan medis...
+
+Pertimbangkan:
+- Apakah perlu pemeriksaan lanjutan?"></textarea>
+
+                <h4 style="margin-top: 25px;">b) Langkah Pencegahan Jangka Panjang</h4>
+                <p style="margin: 10px 0;">Apa saja langkah pencegahan yang harus dilakukan Pasien A agar tidak mengalami reaksi alergi lagi di masa mendatang?</p>
+                <textarea placeholder="Tuliskan langkah pencegahan...
+
+Pertimbangkan:
+- Apa yang harus dihindari?
+- Bagaimana mengenali gejala awal?
+- Edukasi apa yang perlu diberikan?"></textarea>
+
+                <div style="margin-top: 15px;">
+                    <p style="color: #667eea; font-weight: bold;">💡 Sumber Referensi Tambahan:</p>
+                    <a href="https://www.alodokter.com/biduran" class="help-link" target="_blank">📖 Pencegahan Biduran</a> |
+                    <a href="https://hellosehat.com/alergi/penyebab-alergi/" class="help-link" target="_blank">📖 Penyebab Alergi</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 TAHAP 5 CBL: MENARIK KESIMPULAN</h2>
+            
+            <div class="question-box">
+                <h3>Pertanyaan 5 - Menafsirkan Hubungan Data dengan Kondisi Klinis</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Pasien A menjalani pengobatan dan pemantauan rutin selama 4 minggu. Setiap minggu, dokter memeriksa kadar Eosinofil dan IgE serta mengevaluasi gejala yang dialami. Mari kita analisis hubungan antara data laboratorium dengan kondisi klinis pasien.</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Data Pemantauan Pasien A Selama 4 Minggu:</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Minggu ke-</th>
+                        <th>Eosinofil (sel/mm³)</th>
+                        <th>IgE (IU/mL)</th>
+                        <th>Gejala Klinis</th>
+                    </tr>
+                    <tr style="background: #ffebee;">
+                        <td>0 (Awal)</td>
+                        <td>950</td>
+                        <td>580</td>
+                        <td>Gatal berat, bentol banyak, sesak napas</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>680</td>
+                        <td>380</td>
+                        <td>Gatal sedang, bentol berkurang</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>480</td>
+                        <td>210</td>
+                        <td>Gatal ringan, bentol hampir hilang</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>350</td>
+                        <td>130</td>
+                        <td>Gatal hampir hilang</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td>4</td>
+                        <td>320</td>
+                        <td>95</td>
+                        <td>Tidak ada gejala</td>
+                    </tr>
+                </table>
+
+                <!-- FITUR NUMERASI: GRAFIK VISUALISASI -->
+                <div style="margin: 20px 0; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">📈 Visualisasi Data: Grafik Perubahan Kadar Eosinofil</h4>
+                    <canvas id="grafik_pemantauan" width="700" height="400" style="border: 1px solid #ddd; border-radius: 5px; max-width: 100%;"></canvas>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666; text-align: center; font-style: italic;">
+                        Grafik di atas menunjukkan tren penurunan kadar Eosinofil Pasien A selama 4 minggu pengobatan. Garis merah putus-putus menandakan batas normal (400 sel/mm³).
+                    </p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Tafsirkan hubungan antara kadar Eosinofil, IgE, dan gejala klinis yang dialami Pasien A! Gunakan data numerik dalam penjelasan Anda.</p>
+                <p>b) Pada minggu ke berapa Pasien A mulai menunjukkan perbaikan signifikan? Jelaskan berdasarkan data!</p>
+                <p>c) Apa yang dapat disimpulkan tentang hubungan antara penurunan Eosinofil/IgE dengan berkurangnya gejala?</p>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea id="jawaban5" placeholder="Tuliskan analisis lengkap Anda dengan menyertakan data numerik...
+
+Contoh format:
+a) Hubungan yang terlihat:
+- Pada minggu 0, Eosinofil ... dan IgE ..., gejala yang muncul ...
+- Pada minggu 1, Eosinofil turun menjadi ... (penurunan ...%), IgE ...
+- dst.
+
+b) Perbaikan signifikan mulai tampak pada minggu ke-...
+
+c) Kesimpulan hubungan: ..."></textarea>
+                
+                <!-- FITUR NUMERASI: Analisis Grafik -->
+                <div style="margin-top: 15px; padding: 15px; background: #fff3e0; border-radius: 8px; border-left: 4px solid #ff9800;">
+                    <p style="font-weight: bold; color: #e65100; margin-bottom: 10px;">📊 Tantangan Analisis Grafik:</p>
+                    <p style="margin-bottom: 10px; font-size: 0.9em;">Berdasarkan grafik dan tabel di atas, jawab pertanyaan berikut:</p>
+                    
+                    <div style="margin: 10px 0;">
+                        <label style="display: block; margin-bottom: 5px;"><strong>1. Pada minggu ke berapa Eosinofil Rani pertama kali turun di bawah batas normal (400)?</strong></label>
+                        <input type="number" id="check_minggu_normal" min="0" max="4" style="padding: 8px; width: 100px; border: 2px solid #ddd; border-radius: 5px;">
+                        <button onclick="cekMingguNormal()" style="padding: 8px 20px; background: #ff9800; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cek</button>
+                    </div>
+                    <div id="feedback_minggu_normal" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    
+                    <div style="margin: 15px 0;">
+                        <label style="display: block; margin-bottom: 5px;"><strong>2. Berapa total penurunan Eosinofil dari minggu 0 ke minggu 4? (dalam sel/mm³)</strong></label>
+                        <input type="number" id="check_total_penurunan" style="padding: 8px; width: 150px; border: 2px solid #ddd; border-radius: 5px;">
+                        <button onclick="cekTotalPenurunan()" style="padding: 8px 20px; background: #ff9800; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cek</button>
+                    </div>
+                    <div id="feedback_total_penurunan" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    
+                    <p style="margin-top: 15px; font-size: 0.85em; color: #666; font-style: italic;">
+                        💡 Grafik membantu Anda melihat pola dan tren data dengan lebih mudah dibanding hanya membaca tabel!
+                    </p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 6 - Menentukan Kategori Risiko dan Prioritas Penanganan</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Di UGD, dua pasien datang bersamaan dengan gejala alergi. Dokter perlu memutuskan prioritas penanganan berdasarkan tingkat keparahan. Mari kita evaluasi apakah kedua pasien harus ditangani dengan cara yang sama atau berbeda.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Panduan Keputusan Medis Berdasarkan Data Laboratorium:</strong></p>
+                    <ul style="margin-left: 25px; margin-top: 5px;">
+                        <li><strong>Risiko Tinggi (Eosinofil >800 DAN IgE >400):</strong> Terapi intensif segera + rujuk spesialis alergi</li>
+                        <li><strong>Risiko Sedang (Eosinofil 400-800 DAN IgE 200-400):</strong> Terapi standar + monitor ketat 2 minggu</li>
+                        <li><strong>Risiko Rendah (Eosinofil <400 DAN IgE <200):</strong> Terapi simptomatik + monitor rutin 1 bulan</li>
+                    </ul>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Data Kedua Pasien:</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Pasien</th>
+                        <th>Eosinofil (sel/mm³)</th>
+                        <th>IgE (IU/mL)</th>
+                        <th>Gejala Klinis</th>
+                    </tr>
+                    <tr>
+                        <td>Pasien E</td>
+                        <td>520</td>
+                        <td>175</td>
+                        <td>Gatal ringan pada tangan</td>
+                    </tr>
+                    <tr>
+                        <td>Pasien F</td>
+                        <td>880</td>
+                        <td>520</td>
+                        <td>Gatal berat seluruh tubuh + sesak napas</td>
+                    </tr>
+                </table>
+
+                <p style="margin: 15px 0;"><strong>Pernyataan yang Harus Dievaluasi:</strong></p>
+                <div class="important-box">
+                    <p style="font-size: 1.1em;">"Pasien E dan Pasien F sama-sama mengalami alergi, jadi harus ditangani dengan cara yang sama."</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Apakah pernyataan di atas BENAR atau SALAH? Jelaskan alasan Anda dengan merujuk pada data laboratorium!</p>
+                <p>b) Jika Anda adalah dokter, pasien mana yang Anda tangani terlebih dahulu? Mengapa?</p>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea placeholder="Tuliskan evaluasi lengkap Anda...
+
+Contoh format:
+a) Pernyataan tersebut SALAH/BENAR, karena ...
+   - Pasien E: Eosinofil ..., IgE ..., ini menunjukkan ...
+   - Pasien F: Eosinofil ..., IgE ..., ini menunjukkan ...
+
+d) Prioritas penanganan: ..."></textarea>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 7 - Menganalisis Pola Perubahan dan Memilih Visualisasi Data</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Dalam penelitian, seorang siswa mengumpulkan data kadar Eosinofil dari 3 pasien alergi yang diamati selama 6 bulan. Ia ingin membuat visualisasi data untuk memudahkan analisis. Guru memberikan saran tentang jenis grafik yang sebaiknya digunakan.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Penjelasan Jenis Grafik:</strong></p>
+                    <ul style="margin-left: 25px; margin-top: 5px;">
+                        <li><strong>Diagram Batang:</strong> Baik untuk membandingkan kategori/kelompok yang terpisah (misalnya: membandingkan tinggi badan siswa kelas A, B, C)</li>
+                        <li><strong>Grafik Garis:</strong> Baik untuk menunjukkan perubahan/tren data sepanjang waktu (misalnya: suhu tubuh pasien selama seminggu, pertumbuhan tanaman)</li>
+                        <li><strong>Diagram Lingkaran:</strong> Baik untuk menunjukkan proporsi/persentase dari keseluruhan</li>
+                    </ul>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Data Kadar Eosinofil 3 Pasien Selama 6 Bulan:</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Bulan ke-</th>
+                        <th>Pasien G (sel/mm³)</th>
+                        <th>Pasien H (sel/mm³)</th>
+                        <th>Pasien I (sel/mm³)</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>420</td>
+                        <td>380</td>
+                        <td>350</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>580</td>
+                        <td>520</td>
+                        <td>480</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>720</td>
+                        <td>680</td>
+                        <td>620</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>880</td>
+                        <td>820</td>
+                        <td>750</td>
+                    </tr>
+                </table>
+
+                <p style="margin: 15px 0;"><strong>Situasi:</strong></p>
+                <p>Siswa tersebut ingin menggabungkan semua data menjadi diagram batang. Namun, guru menyarankan untuk menggunakan grafik garis.</p>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Apakah saran guru tepat? Jelaskan alasan Anda!</p>
+                <p>b) Apa keuntungan menggunakan grafik garis dibandingkan diagram batang untuk data ini?</p>
+                <p>c) Apa yang dapat disimpulkan tentang kondisi ketiga pasien berdasarkan pola perubahan data?</p>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea placeholder="Tuliskan analisis lengkap Anda...
+
+Contoh format:
+a) Saran guru TEPAT/TIDAK TEPAT, karena ...
+
+b) Keuntungan grafik garis: ...
+
+c) Kesimpulan: ..."></textarea>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 8 - Menyimpulkan Keterkaitan Kepatuhan Terapi dengan Perubahan Data</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Keberhasilan pengobatan alergi sangat bergantung pada kepatuhan pasien dalam menjalani terapi. Mari kita analisis bagaimana kepatuhan terapi mempengaruhi kadar Eosinofil dan IgE pada kasus Pasien A.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Penjelasan Kepatuhan Terapi:</strong></p>
+                    <ul style="margin-left: 25px; margin-top: 5px;">
+                        <li><strong>Patuh:</strong> Minum obat teratur sesuai anjuran dokter + menghindari makanan pemicu alergi</li>
+                        <li><strong>Tidak Patuh:</strong> Tidak minum obat / makan makanan pemicu alergi</li>
+                    </ul>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Data Pemantauan Pasien A dengan Catatan Kepatuhan:</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Minggu ke-</th>
+                        <th>Eosinofil (sel/mm³)</th>
+                        <th>IgE (IU/mL)</th>
+                        <th>Kepatuhan Terapi</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>950</td>
+                        <td>580</td>
+                        <td>Belum terapi</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td>1</td>
+                        <td>680</td>
+                        <td>380</td>
+                        <td>✓ Rutin obat + hindari udang</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td>2</td>
+                        <td>480</td>
+                        <td>210</td>
+                        <td>✓ Rutin obat + hindari udang</td>
+                    </tr>
+                    <tr style="background: #ffebee;">
+                        <td>3</td>
+                        <td>720</td>
+                        <td>420</td>
+                        <td>✗ Tidak minum obat + makan udang di pesta</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td>4</td>
+                        <td>380</td>
+                        <td>150</td>
+                        <td>✓ Kembali rutin obat + hindari udang</td>
+                    </tr>
+                </table>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Hitung persentase kenaikan Eosinofil dari minggu 2 ke minggu 3! Apa artinya?</p>
+                <p>b) Simpulkan hubungan antara kepatuhan terapi dengan perubahan kadar Eosinofil dan IgE! Gunakan data numerik dalam kesimpulan Anda.</p>
+                
+                <div style="margin-top: 15px;">
+                    <p style="color: #667eea; font-weight: bold;">💡 Bantuan Referensi:</p>
+                    <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan" class="help-link" target="_blank">📖 Mekanisme Alergi Makanan</a> |
+                    <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan/patofisiologi" class="help-link" target="_blank">📖 Peran IgE dalam Alergi</a>
+                </div>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea id="jawaban8" placeholder="Tuliskan analisis lengkap Anda dengan data numerik...
+
+Contoh format:
+a) Persentase kenaikan: ...%
+   Artinya: ...
+
+b) Kesimpulan hubungan: ..."></textarea>
+                
+                <!-- FITUR NUMERASI: Validasi Perhitungan Kenaikan -->
+                <div style="margin-top: 15px; padding: 15px; background: #ffebee; border-radius: 8px; border-left: 4px solid #f44336;">
+                    <p style="font-weight: bold; color: #c62828; margin-bottom: 10px;">⚠️ Cek Perhitungan Persentase Kenaikan (Minggu 2 → 3):</p>
+                    <p style="margin-bottom: 10px; font-size: 0.9em;">Hitung berapa persen kenaikan Eosinofil dari minggu 2 (480) ke minggu 3 (720):</p>
+                    
+                    <div style="margin: 10px 0;">
+                        <label style="display: block; margin-bottom: 5px;">Persentase kenaikan Eosinofil (%)</label>
+                        <input type="number" id="check_kenaikan_8" step="0.1" style="padding: 8px; width: 200px; border: 2px solid #ddd; border-radius: 5px;">
+                        <button onclick="cekKenaikan8()" style="padding: 8px 20px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cek Jawaban</button>
+                    </div>
+                    <div id="feedback_kenaikan_8" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    
+                    <p style="margin-top: 15px; font-size: 0.85em; color: #666; font-style: italic;">
+                        💡 Rumus: [(Nilai Minggu 3 - Nilai Minggu 2) / Nilai Minggu 2] × 100%
+                    </p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 9 - Mengevaluasi Ketepatan Data dan Variasi Hasil Laboratorium</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Seorang pasien melakukan pemeriksaan darah di dua laboratorium berbeda pada hari yang sama untuk memastikan hasilnya. Ternyata hasil keduanya sedikit berbeda. Apakah ini berarti ada lab yang keliru?</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Penjelasan tentang Variasi Hasil Lab:</strong></p>
+                    <ul style="margin-left: 25px; margin-top: 5px;">
+                        <li><strong>Variasi Biologis:</strong> Kadar zat dalam darah dapat berubah sedikit sepanjang hari</li>
+                        <li><strong>Variasi Analitik:</strong> Setiap alat lab memiliki tingkat presisi yang sedikit berbeda</li>
+                        <li><strong>Margin of Error:</strong> Hasil lab biasanya memiliki kisaran error ±5-10%</li>
+                        <li><strong>Batas Normal:</strong> Nilai normal adalah RENTANG, bukan angka pasti</li>
+                    </ul>
+                    <p style="margin-top: 10px; font-style: italic; color: #666;">💡 Hasil lab yang sedikit berbeda masih bisa dianggap konsisten jika perbedaannya dalam batas wajar (±5-10%).</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Data Pemeriksaan di Dua Laboratorium:</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Laboratorium</th>
+                        <th>Eosinofil (sel/mm³)</th>
+                        <th>IgE (IU/mL)</th>
+                    </tr>
+                    <tr>
+                        <td>Lab A</td>
+                        <td>320</td>
+                        <td>95</td>
+                    </tr>
+                    <tr>
+                        <td>Lab B</td>
+                        <td>350</td>
+                        <td>102</td>
+                    </tr>
+                    <tr style="background: #e3f2fd;">
+                        <td><strong>Nilai Normal</strong></td>
+                        <td><strong>40-400</strong></td>
+                        <td><strong>&lt;100</strong></td>
+                    </tr>
+                </table>
+
+                <p style="margin: 15px 0;"><strong>Pernyataan yang Harus Dievaluasi:</strong></p>
+                <div class="important-box">
+                    <p style="font-size: 1.1em;">"Hasilnya berbeda, pasti salah satu laboratorium keliru!"</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Apakah pernyataan di atas BENAR atau SALAH? Jelaskan!</p>
+                <p>b) Hitung selisih hasil Eosinofil antara Lab A dan Lab B!</p>
+                <p>c) Hitung persentase perbedaan hasil Eosinofil! Rumus: [(Nilai tertinggi - Nilai terendah) / Nilai terendah] × 100%</p>
+                <p>d) Bagaimana interpretasi hasil dari kedua lab jika dibandingkan dengan nilai normal? Apakah keduanya konsisten?</p>
+                
+                <div style="margin-top: 15px;">
+                    <p style="color: #667eea; font-weight: bold;">💡 Bantuan Referensi:</p>
+                    <a href="https://www.alodokter.com/membedakan-pilek-alergi-dan-pilek-karena-infeksi" class="help-link" target="_blank">🔍 Perbedaan Alergi dan Infeksi</a> |
+                    <a href="https://www.alodokter.com/membedakan-batuk-alergi-dengan-batuk-yang-lain" class="help-link" target="_blank">🔍 Perbedaan Batuk Alergi dan Infeksi</a>
+                </div>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea id="jawaban9" placeholder="Tuliskan evaluasi lengkap Anda dengan perhitungan...
+
+Contoh format:
+a) Pernyataan tersebut SALAH/BENAR, karena ...
+
+b) Selisih Eosinofil: ... sel/mm³
+
+c) Perhitungan persentase perbedaan:
+   [(... - ...) / ...] × 100% = ...%
+
+d) Interpretasi:
+   - Lab A: Eosinofil ..., IgE ... → kesimpulan: ...
+   - Lab B: Eosinofil ..., IgE ... → kesimpulan: ...
+   - Konsistensi: ..."></textarea>
+                
+                <!-- FITUR NUMERASI: Validasi Perhitungan Perbedaan Lab -->
+                <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+                    <p style="font-weight: bold; color: #1976d2; margin-bottom: 10px;">🔬 Cek Perhitungan Persentase Perbedaan Lab:</p>
+                    <p style="margin-bottom: 10px; font-size: 0.9em;">Hitung persentase perbedaan antara Lab A (320) dan Lab B (350):</p>
+                    
+                    <div style="margin: 10px 0;">
+                        <label style="display: block; margin-bottom: 5px;">Persentase perbedaan hasil (%)</label>
+                        <input type="number" id="check_perbedaan_9" step="0.1" style="padding: 8px; width: 200px; border: 2px solid #ddd; border-radius: 5px;">
+                        <button onclick="cekPerbedaan9()" style="padding: 8px 20px; background: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cek Jawaban</button>
+                    </div>
+                    <div id="feedback_perbedaan_9" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    
+                    <p style="margin-top: 15px; font-size: 0.85em; color: #666; font-style: italic;">
+                        💡 Tip: Perbedaan ±5-10% masih dianggap wajar dalam hasil laboratorium. Lebih dari itu perlu investigasi lebih lanjut.
+                    </p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h3>Pertanyaan 10 - Justifikasi Ilmiah Berdasarkan Mekanisme Biologis</h3>
+                <div class="concept-box">
+                    <p><strong>Konteks:</strong> Dalam kasus alergi berat, pasien tidak hanya mengalami satu gejala, tetapi beberapa gejala sekaligus. Mari kita pahami mengapa hal ini terjadi dengan melihat fungsi eosinofil dan mekanisme reaksi alergi.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Penjelasan Mekanisme Alergi:</strong></p>
+                    <ol style="margin-left: 25px; margin-top: 5px;">
+                        <li>Alergen masuk → Sistem imun memproduksi IgE berlebihan</li>
+                        <li>IgE menempel pada sel mast dan basofil</li>
+                        <li>Sel mast melepaskan <strong>histamin</strong> dan mediator kimia lainnya</li>
+                        <li><strong>Eosinofil</strong> direkrut dalam jumlah besar ke area reaksi</li>
+                        <li>Eosinofil melepaskan protein dan mediator yang menyebabkan:
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>Peradangan pada kulit → gatal dan bentol</li>
+                                <li>Peradangan pada saluran napas → sesak napas</li>
+                                <li>Peradangan pada sistem pencernaan → mual</li>
+                                <li>Pelebaran pembuluh darah → pusing</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p style="margin-top: 10px; font-style: italic; color: #666;">💡 Semakin banyak eosinofil yang teraktivasi, semakin banyak mediator inflamasi yang dilepaskan, sehingga gejala yang muncul juga semakin beragam dan parah.</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Hubungan Kadar Eosinofil dengan Jenis Gejala:</strong></p>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Kadar Eosinofil (sel/mm³)</th>
+                        <th>Jenis Gejala yang Muncul</th>
+                    </tr>
+                    <tr>
+                        <td>&lt;400 (Normal)</td>
+                        <td>Tidak ada gejala khusus</td>
+                    </tr>
+                    <tr>
+                        <td>400-600 (Ringan)</td>
+                        <td>Gatal ringan pada area tertentu</td>
+                    </tr>
+                    <tr>
+                        <td>600-800 (Sedang)</td>
+                        <td>Gatal + bentol (urtikaria) menyebar</td>
+                    </tr>
+                    <tr style="background: #ffebee;">
+                        <td>&gt;800 (Berat)</td>
+                        <td><strong>Gatal + bentol + sesak napas + mual + pusing</strong></td>
+                    </tr>
+                </table>
+
+                <p style="margin: 15px 0;"><strong>Kasus Pasien A:</strong></p>
+                <div class="case-box">
+                    <p><strong>Data Laboratorium:</strong> Eosinofil = 950 sel/mm³, IgE = 580 IU/mL</p>
+                    <p><strong>Gejala yang Dialami:</strong> Gatal berat + bentol banyak + sesak napas + mual + pusing</p>
+                </div>
+
+                <p style="margin: 15px 0;"><strong>Pertanyaan:</strong></p>
+                <p>a) Apa hubungan antara tingginya kadar eosinofil dengan keparahan gejala yang dialami?</p>
+                
+                <div style="margin-top: 15px;">
+                    <p style="color: #667eea; font-weight: bold;">💡 Bantuan Referensi:</p>
+                    <a href="https://www.halodoc.com/artikel/kenali-fungsi-eosinofil-dalam-tubuh" class="help-link" target="_blank">🔬 Fungsi Eosinofil</a> |
+                    <a href="https://wirabuana.ac.id/artikel/mekanisme-reaksi-alergi-dalam-tubuh/" class="help-link" target="_blank">📖 Mekanisme Reaksi Alergi</a> |
+                    <a href="https://sardjito.co.id/2022/06/20/faktor-resiko-munculnya-alergi/" class="help-link" target="_blank">📖 Faktor Risiko Alergi</a> |
+                    <a href="https://www.alodokter.com/biduran" class="help-link" target="_blank">📖 Pencegahan Biduran</a> |
+                    <a href="https://hellosehat.com/alergi/penyebab-alergi/" class="help-link" target="_blank">📖 Penyebab Alergi</a>
+                </div>
+                
+                <p style="margin-top: 20px; font-weight: bold;">Jawaban Anda:</p>
+                <textarea placeholder="Tuliskan justifikasi ilmiah lengkap Anda...
+
+Contoh format:
+a) Hubungan kadar eosinofil dengan keparahan: ..."></textarea>
+            </div>
+
+            <div class="question-box">
+                <h3>✅ Kesimpulan Akhir Analisis Kasus</h3>
+                <p style="margin: 15px 0;">Buatlah kesimpulan menyeluruh dari analisis kasus alergi Pasien A berdasarkan semua data dan literatur yang telah Anda pelajari.</p>
+                <ul style="margin-left: 25px; margin-bottom: 15px;">
+                    <li>Diagnosis kondisi Pasien A berdasarkan data laboratorium</li>
+                </ul>
+                <textarea placeholder="Tuliskan kesimpulan menyeluruh Anda...
+
+1. Diagnosis: Berdasarkan data laboratorium ...
+Dll"></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎤 TAHAP 6 CBL: MEMPRESENTASIKAN HASIL ANALISIS</h2>
+            
+            <div class="concept-box">
+                <p><strong>Tahap ini dilakukan di kelas bersama kelompok Anda.</strong>
+            </div>
+            <div class="question-box">
+                <h4>📝 Catatan Persiapan Presentasi</h4>
+                <p style="margin: 10px 0;">Gunakan area ini untuk membuat catatan persiapan presentasi kelompok Anda:</p>
+                <textarea placeholder="Tuliskan rencana presentasi Anda...
+
+- Pembagian tugas anggota kelompok
+- Poin-poin penting yang akan disampaikan
+- dll."></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💭 TAHAP 7 CBL: REFLEKSI DAN REVISI</h2>
+            
+            <div class="concept-box">
+                <p><strong>Refleksi pembelajaran sangat penting untuk mengevaluasi pemahaman Anda dan meningkatkan proses belajar di masa depan.</strong> Jawablah pertanyaan refleksi berikut dengan jujur dan lengkap:</p>
+            </div>
+
+            <div class="question-box">
+                <h3>🤔 Refleksi Pribadi</h3>
+                
+                <h4>1. Apa hal paling menarik yang Anda pelajari dari kasus ini?</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 10px 0;">Renungkan: Konsep baru apa yang membuat Anda tertarik? Mengapa?</p>
+                <textarea placeholder="Tuliskan refleksi Anda..."></textarea>
+
+                <h4 style="margin-top: 25px;">2. Apakah ada kesulitan yang Anda hadapi saat menganalisis data? Bagaimana Anda mengatasinya?</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 10px 0;">Renungkan: Bagian mana yang sulit? Strategi apa yang Anda gunakan untuk mengatasi kesulitan tersebut?</p>
+                <textarea placeholder="Tuliskan refleksi Anda..."></textarea>
+
+                <h4 style="margin-top: 25px;">3. Bagaimana Anda akan menerapkan pengetahuan ini dalam kehidupan sehari-hari?</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 10px 0;">Renungkan: Apakah Anda atau keluarga memiliki alergi? Bagaimana pengetahuan ini membantu Anda memahami kondisi tersebut?</p>
+                <textarea placeholder="Tuliskan refleksi Anda..."></textarea>
+
+                <h4 style="margin-top: 25px;">4. Apa yang akan Anda lakukan berbeda jika menganalisis kasus serupa di masa depan?</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 10px 0;">Renungkan: Keterampilan apa yang perlu ditingkatkan? Pendekatan apa yang lebih efektif?</p>
+                <textarea placeholder="Tuliskan refleksi Anda..."></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 DATA ALERGI DI INDONESIA</h2>
+            
+            <div class="concept-box">
+                <p><strong>Tahukah Anda?</strong> Alergi makanan adalah masalah kesehatan yang cukup umum di Indonesia. Berikut adalah data statistik yang dapat membantu Anda memahami konteks kasus Rani dalam skala yang lebih luas.</p>
+            </div>
+
+            <h3>📈 Statistik Alergi Makanan di Indonesia</h3>
+            
+            <div style="background: white; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h4 style="color: #667eea; margin-bottom: 15px;">Prevalensi (Tingkat Kejadian)</h4>
+                <ul style="margin-left: 25px;">
+                    <li><strong>10,5% - 33%</strong> pada anak-anak</li>
+                    <li><strong>49%</strong> pada populasi umum (data RSCM)</li>
+                    <li><strong>Peningkatan 30% per tahun</strong> dalam kasus baru</li>
+                </ul>
+            </div>
+
+            <div style="background: white; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h4 style="color: #667eea; margin-bottom: 15px;">Distribusi Berdasarkan Jenis Kelamin</h4>
+                <ul style="margin-left: 25px;">
+                    <li><strong>Perempuan:</strong> 68,7% (seperti kasus Rani)</li>
+                    <li><strong>Laki-laki:</strong> 31,3%</li>
+                </ul>
+                <p style="margin-top: 10px; font-style: italic; color: #666;">💡 Perempuan memiliki risiko lebih tinggi mengalami alergi makanan</p>
+            </div>
+
+            <div style="background: white; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h4 style="color: #667eea; margin-bottom: 15px;">Makanan Pemicu Alergi Tersering</h4>
+                <table style="margin: 15px 0;">
+                    <tr>
+                        <th>Makanan Pemicu</th>
+                        <th>Persentase</th>
+                        <th>Keterangan</th>
+                    </tr>
+                    <tr style="background: #fff3cd;">
+                        <td><strong>Udang</strong></td>
+                        <td><strong>29,2%</strong></td>
+                        <td><span class="highlight">TERTINGGI (seperti kasus Rani)</span></td>
+                    </tr>
+                    <tr>
+                        <td>Kepiting</td>
+                        <td>16,7%</td>
+                        <td>Seafood kedua tersering</td>
+                    </tr>
+                    <tr>
+                        <td>Kerang</td>
+                        <td>14,6%</td>
+                        <td>Seafood ketiga tersering</td>
+                    </tr>
+                    <tr>
+                        <td>Telur</td>
+                        <td>13,6% - 50%</td>
+                        <td>Bervariasi menurut usia</td>
+                    </tr>
+                    <tr>
+                        <td>Susu sapi</td>
+                        <td>-</td>
+                        <td>Terutama pada anak</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: white; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h4 style="color: #667eea; margin-bottom: 15px;">Gejala yang Paling Sering Muncul</h4>
+                <ul style="margin-left: 25px;">
+                    <li><strong>Reaksi kulit:</strong> 86,7% (gatal, bentol/urtikaria) - seperti yang dialami Rani</li>
+                    <li><strong>Gejala pencernaan:</strong> mual, muntah, diare</li>
+                    <li><strong>Gejala pernapasan:</strong> sesak napas, batuk</li>
+                    <li><strong>Gejala sistemik:</strong> pusing, lemas</li>
+                </ul>
+            </div>
+
+            <div class="important-box">
+                <h4>🎯 Relevansi dengan Kasus Pasien A</h4>
+                <p>Kasus Pasien A adalah contoh tipikal dari alergi makanan di Indonesia:</p>
+                <ul style="margin-left: 25px; margin-top: 10px;">
+                    <li>✓ Perempuan remaja (kelompok risiko tinggi)</li>
+                    <li>✓ Alergi terhadap udang (pemicu tersering #1)</li>
+                    <li>✓ Gejala kulit berupa gatal dan urtikaria (86,7% kasus)</li>
+                    <li>✓ Disertai gejala sistemik (sesak napas, mual, pusing)</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 30px;">📚 Sumber Data Statistik</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                <a href="https://www.klikdokter.com/info-sehat/kesehatan-umum/fakta-mengenai-alergi-makanan-di-indonesia" class="link-button" target="_blank">📖 KlikDokter: Fakta Alergi</a>
+                <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan/epidemiologi" class="link-button" target="_blank">📊 Alomedika: Epidemiologi</a>
+                <a href="https://www.idai.or.id/artikel/seputar-kesehatan-anak/alergi-makanan-pada-bayi-dan-anak" class="link-button" target="_blank">👨‍⚕️ IDAI - Alergi Makanan</a>
+                <a href="https://www.alomedika.com/penyakit/alergi-dan-imunologi/alergi-makanan" class="link-button" target="_blank">📖 Alomedika - Alergi</a>
+            </div>
+        </div>
+
+        <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-left: none;">
+            <h2 style="color: white;">✅ SELESAI - SIMPAN HASIL KERJA ANDA</h2>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <button onclick="downloadPDF()" style="background: white; color: #667eea; padding: 20px 40px; font-size: 1.3em; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: transform 0.2s;">
+                    💾 Download E-LKPD sebagai PDF
+                </button>
+                <p style="color: white; margin-top: 15px; font-size: 0.9em;">Klik tombol di atas untuk menyimpan E-LKPD Anda</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: white; margin-bottom: 15px;">💾 Cara Menyimpan E-LKPD Anda</h3>
+                <p style="color: white; margin-bottom: 15px;"><strong>Opsi 1: Klik Tombol Download (Mudah)</strong></p>
+                <ol style="margin-left: 25px; color: white;">
+                    <li style="margin: 10px 0;">Klik tombol <strong>"💾 Download E-LKPD sebagai PDF"</strong> di atas</li>
+                    <li style="margin: 10px 0;">Pilih <strong>"Save as PDF"</strong></li>
+                    <li style="margin: 10px 0;">Beri nama file: <strong>ELKPD_SistemImun_Nama_Kelas</strong></li>
+                    <li style="margin: 10px 0;">Klik <strong>Save</strong></li>
+                </ol>
+                
+                <p style="color: white; margin: 20px 0 10px 0;"><strong>Opsi 2: Manual (Alternatif)</strong></p>
+                <ol style="margin-left: 25px; color: white;">
+                    <li style="margin: 10px 0;"><strong>Tekan Ctrl+P</strong> (Windows) atau <strong>Cmd+P</strong> (Mac) untuk membuka menu print</li>
+                    <li style="margin: 10px 0;">Pilih <strong>"Save as PDF"</strong> atau <strong>"Microsoft Print to PDF"</strong></li>
+                    <li style="margin: 10px 0;">Beri nama file: <strong>ELKPD_SistemImun_Nama_Kelas</strong></li>
+                    <li style="margin: 10px 0;">Klik <strong>Save</strong></li>
+                    <li style="margin: 10px 0;">Kirim file PDF ke guru melalui platform yang ditentukan</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
+            <h3 style="color: #667eea; margin-bottom: 15px;">📝 Informasi E-LKPD</h3>
+            <p><strong>Mata Pelajaran:</strong> Biologi</p>
+            <p><strong>Jenjang:</strong> Fase F (Kelas XI)</p>
+            <p><strong>Semester:</strong> 2 (Genap)</p>
+            <p><strong>Materi:</strong> Sistem Imun - Gangguan dan Kelainan</p>
+            <p><strong>Model Pembelajaran:</strong> Case Based Learning (CBL)</p>
+            <p><strong>Tahun Pelajaran:</strong> 2025/2026</p>
+            
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #ddd;">
+                <p style="color: #666; font-size: 0.9em;">Dikembangkan untuk pembelajaran bermakna melalui analisis kasus nyata</p>
+                <p style="color: #667eea; font-weight: bold; margin-top: 10px;">Selamat Belajar! 🎓</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Auto-save to localStorage (optional enhancement)
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            // Load saved value
+            const savedValue = localStorage.getItem(input.placeholder || input.type);
+            if (savedValue) {
+                input.value = savedValue;
+            }
+            
+            // Save on change
+            input.addEventListener('input', () => {
+                localStorage.setItem(input.placeholder || input.type, input.value);
+            });
+        });
+        
+        // Download PDF function
+        function downloadPDF() {
+            window.print();
+        }
+        
+        // Print button functionality
+        function printLKPD() {
+            window.print();
+        }
+        
+        // ===== FITUR NUMERASI: VALIDASI PERHITUNGAN =====
+        
+        // Pertanyaan 2: Cek Selisih
+        function cekSelisih2() {
+            const jawaban = parseFloat(document.getElementById('check_selisih_2').value);
+            const feedback = document.getElementById('feedback_selisih_2');
+            const jawabanBenar = 550; // 950 - 400
+            
+            feedback.style.display = 'block';
+            
+            if (isNaN(jawaban)) {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = '⚠️ Silakan masukkan angka terlebih dahulu.';
+            } else if (jawaban === jawabanBenar) {
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '✅ <strong>Benar!</strong> Selisih = 550 sel/mm³. Perhitungan Anda sudah tepat! Lanjutkan ke perhitungan persentase.';
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = '❌ <strong>Belum tepat.</strong> Coba periksa kembali perhitungan Anda.<br>' +
+                    '<strong>Hint:</strong> Selisih = Nilai Rani - Nilai Normal Batas Atas<br>' +
+                    'Pastikan Anda menggunakan angka yang tepat dari tabel!';
+            }
+        }
+        
+        // Pertanyaan 2: Cek Persentase
+        function cekPersen2() {
+            const jawaban = parseFloat(document.getElementById('check_persen_2').value);
+            const feedback = document.getElementById('feedback_persen_2');
+            const jawabanBenar = 137.5; // [(950-400)/400] x 100
+            
+            feedback.style.display = 'block';
+            
+            if (isNaN(jawaban)) {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = '⚠️ Silakan masukkan angka terlebih dahulu.';
+            } else if (Math.abs(jawaban - jawabanBenar) < 0.5) { // toleransi 0.5%
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '✅ <strong>Benar!</strong> Persentase kenaikan = 137.5%. Perhitungan Anda sudah tepat!<br>' +
+                    '<strong>Interpretasi:</strong> Kadar Eosinofil Rani meningkat <strong>137.5%</strong> dari batas normal, ini menunjukkan reaksi alergi yang <strong>BERAT</strong>.';
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = '❌ <strong>Belum tepat.</strong> Coba periksa kembali perhitungan Anda.<br>' +
+                    '<strong>Hint:</strong> Gunakan rumus: [(Nilai Rani - Nilai Normal) / Nilai Normal] × 100%<br>' +
+                    'Pastikan urutan operasi matematika sudah benar: kurang dulu, bagi, baru kalikan 100!';
+            }
+        }
+        
+        // Pertanyaan 4: Cek Perhitungan Efektivitas
+        function cekEfektivitas4() {
+            const pasienX = parseFloat(document.getElementById('check_efek_x').value);
+            const pasienY = parseFloat(document.getElementById('check_efek_y').value);
+            const pasienZ = parseFloat(document.getElementById('check_efek_z').value);
+            const feedback = document.getElementById('feedback_efek_4');
+            
+            // Jawaban benar (persentase penurunan)
+            const benarX = 58.7; // [(920-380)/920] x 100
+            const benarY = 23.5; // [(680-520)/680] x 100
+            const benarZ = 4.2;  // [(480-460)/480] x 100
+            
+            feedback.style.display = 'block';
+            
+            if (isNaN(pasienX) || isNaN(pasienY) || isNaN(pasienZ)) {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = '⚠️ Silakan lengkapi ketiga perhitungan terlebih dahulu.';
+                return;
+            }
+            
+            const semuaBenar = 
+                Math.abs(pasienX - benarX) < 1 && 
+                Math.abs(pasienY - benarY) < 1 && 
+                Math.abs(pasienZ - benarZ) < 1;
+            
+            if (semuaBenar) {
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '✅ <strong>Sempurna!</strong> Ketiga perhitungan Anda benar:<br>' +
+                    '• Pasien X: ~58.7% penurunan (PALING EFEKTIF)<br>' +
+                    '• Pasien Y: ~23.5% penurunan<br>' +
+                    '• Pasien Z: ~4.2% penurunan (PALING TIDAK EFEKTIF)<br><br>' +
+                    '<strong>Kesimpulan:</strong> Pasien X menunjukkan respon terapi paling baik dengan penurunan hampir 60%!';
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                let pesanError = '❌ <strong>Ada yang belum tepat.</strong> Periksa kembali perhitungan Anda:<br>';
+                
+                if (Math.abs(pasienX - benarX) >= 1) pesanError += '• Pasien X perlu diperiksa ulang<br>';
+                if (Math.abs(pasienY - benarY) >= 1) pesanError += '• Pasien Y perlu diperiksa ulang<br>';
+                if (Math.abs(pasienZ - benarZ) >= 1) pesanError += '• Pasien Z perlu diperiksa ulang<br>';
+                
+                pesanError += '<br><strong>Hint:</strong> Gunakan rumus persentase penurunan: [(Nilai Awal - Nilai Akhir) / Nilai Awal] × 100%';
+                
+                feedback.innerHTML = pesanError;
+            }
+        }
+        
+        // Pertanyaan 8: Cek Persentase Kenaikan minggu 2 ke 3
+        function cekKenaikan8() {
+            const jawaban = parseFloat(document.getElementById('check_kenaikan_8').value);
+            const feedback = document.getElementById('feedback_kenaikan_8');
+            const jawabanBenar = 50; // [(720-480)/480] x 100
+            
+            feedback.style.display = 'block';
+            
+            if (isNaN(jawaban)) {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = '⚠️ Silakan masukkan angka terlebih dahulu.';
+            } else if (Math.abs(jawaban - jawabanBenar) < 1) {
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '✅ <strong>Benar!</strong> Eosinofil naik 50% dari minggu 2 ke minggu 3.<br>' +
+                    '<strong>Artinya:</strong> Ketika Rani tidak patuh (tidak minum obat + makan udang), kadar Eosinofil langsung <strong>melonjak drastis 50%</strong>! ' +
+                    'Ini menunjukkan betapa pentingnya kepatuhan terapi.';
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = '❌ <strong>Belum tepat.</strong> Coba hitung lagi dengan teliti.<br>' +
+                    '<strong>Hint:</strong> Bandingkan Eosinofil minggu 2 (480) dengan minggu 3 (720)<br>' +
+                    'Rumus: [(Nilai Minggu 3 - Nilai Minggu 2) / Nilai Minggu 2] × 100%';
+            }
+        }
+        
+        // Pertanyaan 9: Cek Persentase Perbedaan Lab
+        function cekPerbedaan9() {
+            const jawaban = parseFloat(document.getElementById('check_perbedaan_9').value);
+            const feedback = document.getElementById('feedback_perbedaan_9');
+            const jawabanBenar = 9.4; // [(350-320)/320] x 100
+            
+            feedback.style.display = 'block';
+            
+            if (isNaN(jawaban)) {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = '⚠️ Silakan masukkan angka terlebih dahulu.';
+            } else if (Math.abs(jawaban - jawabanBenar) < 0.5) {
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '✅ <strong>Benar!</strong> Perbedaan = ~9.4%<br>' +
+                    '<strong>Kesimpulan:</strong> Perbedaan 9.4% masih dalam batas wajar (±5-10%) untuk variasi laboratorium. ' +
+                    'Kedua hasil Lab A dan Lab B sama-sama menunjukkan kadar Eosinofil dalam batas normal, jadi <strong>KONSISTEN</strong>!';
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = '❌ <strong>Belum tepat.</strong> Periksa kembali perhitungan Anda.<br>' +
+                    '<strong>Hint:</strong> Rumus: [(Nilai Tertinggi - Nilai Terendah) / Nilai Terendah] × 100%<br>' +
+                    'Lab A = 320, Lab B = 350. Mana yang lebih tinggi?';
+            }
+        }
+        
+        // ===== FITUR NUMERASI: GRAFIK INTERAKTIF =====
+        
+        function buatGrafikPemantauan() {
+            const canvas = document.getElementById('grafik_pemantauan');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Data
+            const minggu = [0, 1, 2, 3, 4];
+            const eosinofil = [950, 680, 480, 350, 320];
+            const maxEos = 1000;
+            const normalBatas = 400;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Background
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Grid dan label
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            
+            // Garis horizontal (nilai)
+            for (let i = 0; i <= 5; i++) {
+                const y = height - 40 - (i * (height - 60) / 5);
+                ctx.beginPath();
+                ctx.moveTo(50, y);
+                ctx.lineTo(width - 20, y);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText((i * 200).toString(), 45, y + 4);
+            }
+            
+            // Garis normal (400)
+            const yNormal = height - 40 - (normalBatas / maxEos * (height - 60));
+            ctx.strokeStyle = '#f44336';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(50, yNormal);
+            ctx.lineTo(width - 20, yNormal);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            ctx.fillStyle = '#f44336';
+            ctx.font = 'bold 11px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('Batas Normal (400)', width - 150, yNormal - 5);
+            
+            // Label sumbu X
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            for (let i = 0; i < minggu.length; i++) {
+                const x = 50 + (i * (width - 70) / (minggu.length - 1));
+                ctx.fillText('Minggu ' + minggu[i], x, height - 15);
+            }
+            
+            // Label sumbu Y
+            ctx.save();
+            ctx.translate(15, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Kadar Eosinofil (sel/mm³)', 0, 0);
+            ctx.restore();
+            
+            // Plot garis data
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            for (let i = 0; i < eosinofil.length; i++) {
+                const x = 50 + (i * (width - 70) / (eosinofil.length - 1));
+                const y = height - 40 - (eosinofil[i] / maxEos * (height - 60));
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+            
+            // Plot titik data
+            for (let i = 0; i < eosinofil.length; i++) {
+                const x = 50 + (i * (width - 70) / (eosinofil.length - 1));
+                const y = height - 40 - (eosinofil[i] / maxEos * (height - 60));
+                
+                // Titik
+                ctx.fillStyle = eosinofil[i] > normalBatas ? '#f44336' : '#4caf50';
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Outline titik
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Label nilai
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 11px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(eosinofil[i].toString(), x, y - 12);
+            }
+        }
+        
+        // Validasi analisis grafik
+        function cekMingguNormal() {
+            const jawaban = parseInt(document.getElementById('check_minggu_normal').value);
+            const feedback = document.getElementById('feedback_minggu_normal');
+            const jawabanBenar = 3;
+            
+            feedback.style.display = 'block';
+            
+            if (isNaN(jawaban)) {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = '⚠️ Silakan masukkan angka minggu (0-4).';
+            } else if (jawaban === jawabanBenar) {
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '✅ <strong>Benar!</strong> Pada minggu ke-3, Eosinofil turun menjadi 350 sel/mm³, yang sudah di bawah batas normal 400. ' +
+                    'Ini menandakan Rani sudah mulai pulih dari reaksi alergi!';
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = '❌ <strong>Belum tepat.</strong> Perhatikan grafik dengan teliti.<br>' +
+                    '<strong>Hint:</strong> Lihat kapan garis biru (data Eosinofil) turun di bawah garis merah putus-putus (batas normal 400).';
+            }
+        }
+        
+        function cekTotalPenurunan() {
+            const jawaban = parseFloat(document.getElementById('check_total_penurunan').value);
+            const feedback = document.getElementById('feedback_total_penurunan');
+            const jawabanBenar = 630; // 950 - 320
+            
+            feedback.style.display = 'block';
+            
+            if (isNaN(jawaban)) {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = '⚠️ Silakan masukkan angka terlebih dahulu.';
+            } else if (jawaban === jawabanBenar) {
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = '✅ <strong>Sempurna!</strong> Total penurunan = 630 sel/mm³ (dari 950 menjadi 320).<br>' +
+                    '<strong>Interpretasi:</strong> Ini berarti Eosinofil Rani turun sebesar <strong>66.3%</strong> setelah 4 minggu terapi! Menunjukkan terapi sangat efektif.';
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = '❌ <strong>Belum tepat.</strong> Coba hitung lagi.<br>' +
+                    '<strong>Hint:</strong> Total penurunan = Nilai Minggu 0 - Nilai Minggu 4<br>' +
+                    'Lihat titik pertama dan titik terakhir di grafik!';
+            }
+        }
+        
+        // Load grafik saat halaman dimuat
+        window.addEventListener('load', function() {
+            buatGrafikPemantauan();
+        });
+    </script>
+    
+    <style>
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            
+            button {
+                display: none;
+            }
+            
+            .link-button {
+                color: #667eea;
+                text-decoration: underline;
+            }
+            
+            @page {
+                margin: 1.5cm;
+            }
+        }
+    </style>
+</body>
+</html>
